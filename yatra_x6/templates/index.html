@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Yatra X6 | Smart Tourism</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/" aria-label="Yatra X6 home">
+      <span class="brand-mark">YX</span>
+      <span>Yatra X6</span>
+    </a>
+    <nav class="main-nav" aria-label="Primary navigation">
+      <a href="#planner">Planner</a>
+      <a href="#route">Route</a>
+      <a href="#ticket">Tickets</a>
+      <a href="#sos" class="nav-alert">SOS</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-copy">
+        <p class="eyebrow">Intelligent journeys across India</p>
+        <h1 id="hero-title">Travel with a plan that feels like yours.</h1>
+        <p class="hero-text">Build a day-by-day itinerary, find your route, collect digital tickets, and keep help close at hand.</p>
+        <a class="button button-primary" href="#planner">Start planning <span aria-hidden="true">-&gt;</span></a>
+      </div>
+      <div class="hero-stat" aria-label="Yatra features">
+        <span class="stat-number">4</span>
+        <span class="stat-label">travel essentials<br>in one place</span>
+      </div>
+    </section>
+
+    <section class="workspace" aria-label="Travel tools">
+      <div class="section-heading">
+        <p class="eyebrow">Your trip desk</p>
+        <h2>Make the next move.</h2>
+      </div>
+
+      <div class="tool-grid">
+        <article class="tool-panel planner-panel" id="planner">
+          <div class="panel-kicker">01 / Itinerary</div>
+          <h3>Shape your days</h3>
+          <p class="panel-description">Tell us where you are going and what matters to you.</p>
+          <form id="itinerary-form" class="tool-form">
+            <label for="destination">Destination</label>
+            <input id="destination" name="destination" type="text" placeholder="e.g. Jaipur" required>
+
+            <div class="form-row">
+              <div>
+                <label for="days">Days</label>
+                <input id="days" name="days" type="number" min="1" max="30" value="3" required>
+              </div>
+              <div>
+                <label for="budget">Budget (INR)</label>
+                <input id="budget" name="budget" type="number" min="0" placeholder="15000" required>
+              </div>
+            </div>
+
+            <label for="interests">Interests</label>
+            <input id="interests" name="interests" type="text" placeholder="food, history, art">
+            <button class="button button-dark" type="submit">Generate itinerary</button>
+          </form>
+          <div id="itinerary-result" class="result" aria-live="polite"></div>
+        </article>
+
+        <article class="tool-panel route-panel" id="route">
+          <div class="panel-kicker">02 / Routing</div>
+          <h3>Find your way</h3>
+          <p class="panel-description">Get distance and travel time between two places.</p>
+          <form id="route-form" class="tool-form">
+            <label for="route-start">Start coordinates</label>
+            <input id="route-start" name="start" type="text" placeholder="28.6139, 77.2090" required>
+            <label for="route-end">End coordinates</label>
+            <input id="route-end" name="end" type="text" placeholder="27.1767, 78.0081" required>
+            <button class="button button-outline" type="submit">Calculate route</button>
+          </form>
+          <div id="route-result" class="result" aria-live="polite"></div>
+          <div id="route-map" class="map-placeholder" aria-label="Route map">Map preview appears here</div>
+        </article>
+
+        <article class="tool-panel ticket-panel" id="ticket">
+          <div class="panel-kicker">03 / Ticketing</div>
+          <h3>Carry less paper</h3>
+          <p class="panel-description">Create a digital monument ticket with a scannable QR code.</p>
+          <form id="ticket-form" class="tool-form">
+            <label for="ticket-name">Your name</label>
+            <input id="ticket-name" name="name" type="text" placeholder="Full name" required>
+            <label for="monument">Monument</label>
+            <input id="monument" name="monument" type="text" placeholder="e.g. Taj Mahal" required>
+            <label for="visit-date">Visit date</label>
+            <input id="visit-date" name="date" type="date" required>
+            <button class="button button-dark" type="submit">Create ticket</button>
+          </form>
+          <div id="ticket-result" class="result" aria-live="polite"></div>
+          <form id="verify-form" class="verify-form">
+            <label for="verify-ticket-id">Verify ticket ID</label>
+            <div class="verify-row">
+              <input id="verify-ticket-id" name="ticket_id" type="text" placeholder="Paste ticket ID" required>
+              <button class="button button-outline" type="submit">Verify</button>
+            </div>
+          </form>
+          <div id="verify-result" class="result" aria-live="polite"></div>
+        </article>
+
+        <article class="tool-panel sos-panel" id="sos">
+          <div class="panel-kicker">04 / Safety</div>
+          <h3>Help, one tap away.</h3>
+          <p class="panel-description">Share your live location with your emergency contact.</p>
+          <button id="sos-button" class="button button-alert" type="button">Send SOS alert</button>
+          <p class="sos-note">Location access is requested only when you send an alert.</p>
+          <div id="sos-result" class="result" aria-live="polite"></div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <span>Yatra X6</span>
+    <span>Smart tourism, thoughtfully connected.</span>
+  </footer>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
+  <script src="{{ url_for('static', filename='js/app.js') }}" defer></script>
+</body>
+</html>
