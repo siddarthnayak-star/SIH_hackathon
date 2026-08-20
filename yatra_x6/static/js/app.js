@@ -3,8 +3,10 @@ const routeForm = document.querySelector("#route-form");
 const ticketForm = document.querySelector("#ticket-form");
 const verifyForm = document.querySelector("#verify-form");
 const sosButton = document.querySelector("#sos-button");
+const scannerToggle = document.querySelector("#scanner-toggle");
 let routeMap;
 let routeLayer;
+let qrScanner;
 
 function setResult(elementId, message, type = "") {
   const element = document.querySelector(elementId);
@@ -131,6 +133,49 @@ verifyForm?.addEventListener("submit", async (event) => {
   } catch (error) {
     setResult("#verify-result", error.message, "result-error");
   }
+});
+
+async function verifyTicket(ticketId) {
+  setResult("#verify-result", "Checking ticket...");
+  try {
+    const result = await requestJson(`/api/ticket/${encodeURIComponent(ticketId)}/verify`, { method: "POST" });
+    setResult("#verify-result", result.message, "result-success");
+  } catch (error) {
+    setResult("#verify-result", error.message, "result-error");
+  }
+}
+
+scannerToggle?.addEventListener("click", async () => {
+  const reader = document.querySelector("#qr-reader");
+  if (qrScanner) {
+    await qrScanner.stop();
+    qrScanner.clear();
+    qrScanner = null;
+    reader.hidden = true;
+    scannerToggle.textContent = "Scan QR ticket";
+    return;
+  }
+  if (!window.Html5Qrcode) {
+    setResult("#verify-result", "QR scanner library is unavailable.", "result-error");
+    return;
+  }
+  reader.hidden = false;
+  scannerToggle.textContent = "Stop scanner";
+  qrScanner = new Html5Qrcode("qr-reader");
+  await qrScanner.start(
+    { facingMode: "environment" },
+    { fps: 10, qrbox: { width: 220, height: 220 } },
+    async (decodedText) => {
+      document.querySelector("#verify-ticket-id").value = decodedText;
+      await verifyTicket(decodedText);
+      await qrScanner.stop();
+      qrScanner.clear();
+      qrScanner = null;
+      reader.hidden = true;
+      scannerToggle.textContent = "Scan QR ticket";
+    },
+    () => {}
+  );
 });
 
 ticketForm?.addEventListener("submit", async (event) => {

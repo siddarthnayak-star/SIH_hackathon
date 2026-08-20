@@ -425,6 +425,17 @@ main,
   width: auto;
 }
 
+.qr-reader {
+  margin-top: 14px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: #fffefa;
+}
+
+.qr-reader video {
+  width: 100% !important;
+}
+
 .result-success {
   color: var(--teal);
 }

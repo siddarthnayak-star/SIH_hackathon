@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Yatra X6 | Smart Tourism</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <script src="https://unpkg.com/html5-qrcode" defer></script>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
@@ -105,6 +106,8 @@
             </div>
           </form>
           <div id="verify-result" class="result" aria-live="polite"></div>
+          <button id="scanner-toggle" class="button button-outline" type="button">Scan QR ticket</button>
+          <div id="qr-reader" class="qr-reader" hidden></div>
         </article>
 
         <article class="tool-panel sos-panel" id="sos">

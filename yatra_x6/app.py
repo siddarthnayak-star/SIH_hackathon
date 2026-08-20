@@ -27,6 +27,12 @@ def api_itinerary():
     required = {"destination", "days", "budget", "interests"}
     if not data or not required.issubset(data):
         return api_error("destination, days, budget, and interests are required")
+    if not isinstance(data["days"], int) or not 1 <= data["days"] <= 30:
+        return api_error("days must be an integer between 1 and 30")
+    if not isinstance(data["budget"], (int, float)) or data["budget"] < 0:
+        return api_error("budget must be a non-negative number")
+    if not isinstance(data["interests"], list):
+        return api_error("interests must be a list")
     try:
         plan = generate_itinerary(data["destination"], data["days"], data["budget"], data["interests"])
     except (RuntimeError, ValueError) as exc:
@@ -38,6 +44,10 @@ def api_route():
     data = request.json
     if not data or not data.get("start") or not data.get("end"):
         return api_error("start and end coordinates are required")
+    if not all(isinstance(value, (int, float)) for point in (data["start"], data["end"]) for value in point):
+        return api_error("coordinates must contain numbers")
+    if any(len(point) != 2 for point in (data["start"], data["end"])):
+        return api_error("coordinates must be [latitude, longitude]")
     try:
         return jsonify(get_route(data["start"], data["end"]))
     except (RuntimeError, ValueError, KeyError) as exc:
