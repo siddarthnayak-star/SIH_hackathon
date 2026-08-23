@@ -1,5 +1,6 @@
 from dotenv import load_dotenv
 from flask import Flask, request, jsonify, render_template
+import math
 
 load_dotenv()
 
@@ -82,6 +83,12 @@ def api_sos():
     data = request.json
     if not data or not all(key in data for key in ("lat", "lng", "user")):
         return api_error("lat, lng, and user are required")
+    if not all(isinstance(data[key], (int, float)) and math.isfinite(data[key]) for key in ("lat", "lng")):
+        return api_error("lat and lng must be finite numbers")
+    if not -90 <= data["lat"] <= 90 or not -180 <= data["lng"] <= 180:
+        return api_error("lat or lng is outside the valid range")
+    if not isinstance(data["user"], str) or not data["user"].strip():
+        return api_error("user must be a non-empty string")
     try:
         send_sos_alert(data["lat"], data["lng"], data["user"])
     except (RuntimeError, ValueError) as exc:
