@@ -229,9 +229,14 @@ sosButton?.addEventListener("click", () => {
       sosButton.disabled = false;
       sosButton.textContent = "Send SOS alert";
     }
-  }, () => {
-    setResult("#sos-result", "Location permission was denied or unavailable.", "result-error");
+  }, (error) => {
+    const messages = {
+      1: "Location permission was denied. Allow location access for this site and try again.",
+      2: "Your location could not be determined. Check device location services and try again.",
+      3: "Location request timed out. Check device location services and try again.",
+    };
+    setResult("#sos-result", messages[error.code] || "Location is unavailable.", "result-error");
     sosButton.disabled = false;
     sosButton.textContent = "Send SOS alert";
-  });
+  }, {enableHighAccuracy: true, timeout: 10000, maximumAge: 0});
 });
